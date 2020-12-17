@@ -6,7 +6,7 @@ require 'openssl'
 # Модель пользователя.
 #
 # Каждый экземпляр этого класса — загруженная из БД инфа о конкретном юзере.
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   # Параметры работы для модуля шифрования паролей
   ITERATIONS = 20_000
   DIGEST = OpenSSL::Digest::SHA256.new
@@ -41,8 +41,15 @@ class User < ActiveRecord::Base
 
   validates :email, format: { with: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i, message: "Неверный формат e-mail" }
 
-  validates :username, format: { with: /[a-z\d\_]+/i, message: "Неверный формат логина" }, length: { maximum: 40 }
+  validates :username, format: { with: /[a-z\d\_]+/i, message: "Неверный формат логина" }, length: { maximum: 40 }, uniqueness: {case_sensitive: false}
 
+
+  before_validation :normalize_username, on: :create
+
+  private
+  def normalize_username
+    self.username = username.downcase
+  end
 
 
   # Валидация, которая проверяет совпадения значений полей password и
