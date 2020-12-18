@@ -9,11 +9,6 @@ class Question < ApplicationRecord
   # добавляет метод .user к данному объекту.
   #
   # Вспоминайте уроки про рельционные БД и связи между таблицами.
-  #
-  # Когда мы вызываем метод user у экземпляра класса Question, рельсы
-  # поймут это как просьбу найти в базе объект класса User со значением id
-  # равный question.user_id.
-  belongs_to :user
 
   # Эта валидация препятствует созданию вопросов, у которых нет пользователя
   # если задан пустой текст вопроса (поле text пустое), объект не будет сохранен
@@ -21,5 +16,3 @@ class Question < ApplicationRecord
   validates :user, :text, presence: true
   validates :text, length: { maximum: 255 }
 end
-
-

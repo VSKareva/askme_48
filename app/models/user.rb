@@ -10,6 +10,8 @@ class User < ApplicationRecord
   # Параметры работы для модуля шифрования паролей
   ITERATIONS = 20_000
   DIGEST = OpenSSL::Digest::SHA256.new
+  USERNAME_REGEX = /[\w]/
+  USERNAME_EMAIL_REGEX = /[\w\d]+@[\w\d]+\.[\w]+/
 
   # Виртуальное поле, которое не сохраняется в базу. Из него перед сохранением
   # читается пароль, и сохраняется в базу уже зашифрованная версия пароля в
@@ -26,36 +28,23 @@ class User < ApplicationRecord
   # значением user_id равный user.id.
   has_many :questions
 
-  # Валидация, которая проверяет, что поля email и username не пустые и не равны
-  # nil. Если не задан email и username, объект не будет сохранен в базу.
-  validates :email, :username, presence: true
-
-  # Валидация, которая проверяет уникальность полей email и username. Если в
-  # базе данных уже есть записи с такими email и/или username, объект не будет
-  # сохранен в базу.
-  validates :email, :username, uniqueness: true
-
   # Поле password нужно только при создании (create) нового юзера — регистрации.
   # При аутентификации (логине) мы будем сравнивать уже зашифрованные поля.
-  validates :password, presence: true, on: :create
+  validates :password, confirmation: true, presence: true, on: :create
 
-  validates :email, format: { with: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i, message: "Неверный формат e-mail" }
+  validates :email, format: {with: USERNAME_EMAIL_REGEX}, uniqueness: true, presence: true
 
-  validates :username, format: { with: /[a-z\d\_]+/i, message: "Неверный формат логина" }, length: { maximum: 40 }, uniqueness: {case_sensitive: false}
-
+  validates :username, format: {with: USERNAME_REGEX}, length: {maximum: 40}, uniqueness: true, presence: true
 
   before_validation :normalize_username, on: :create
 
   private
+
   def normalize_username
-    self.username = username.downcase
+    if username !=nil
+      self.username = username.downcase
+    end
   end
-
-
-  # Валидация, которая проверяет совпадения значений полей password и
-  # password_confirmation. Понадобится при создании формы регистрации, чтобы
-  # снизить число ошибочно введенных паролей.
-  validates_confirmation_of :password
 
   # Ошибки валидаций можно посмотреть методом errors.
 
