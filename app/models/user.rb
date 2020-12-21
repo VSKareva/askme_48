@@ -10,8 +10,8 @@ class User < ApplicationRecord
   # Параметры работы для модуля шифрования паролей
   ITERATIONS = 20_000
   DIGEST = OpenSSL::Digest::SHA256.new
-  USERNAME_REGEX = /[\w]/
-  USERNAME_EMAIL_REGEX = /[\w\d]+@[\w\d]+\.[\w]+/
+  USERNAME_REGEX = /\A[\w]+\z/
+  USERNAME_EMAIL_REGEX = /\A[\w\d]+@[\w\d]+\.[\w]+\z/
 
   # Виртуальное поле, которое не сохраняется в базу. Из него перед сохранением
   # читается пароль, и сохраняется в базу уже зашифрованная версия пароля в
@@ -37,14 +37,6 @@ class User < ApplicationRecord
   validates :username, format: {with: USERNAME_REGEX}, length: {maximum: 40}, uniqueness: true, presence: true
 
   before_validation :normalize_username, on: :create
-
-  private
-
-  def normalize_username
-    if username !=nil
-      self.username = username.downcase
-    end
-  end
 
   # Ошибки валидаций можно посмотреть методом errors.
 
@@ -103,4 +95,13 @@ class User < ApplicationRecord
     # Иначе, возвращаем nil
     nil
   end
+
+  private
+
+  def normalize_username
+    if username !=nil
+      self.username = username.downcase
+    end
+  end
+
 end
