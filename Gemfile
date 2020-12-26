@@ -18,7 +18,11 @@ gem 'webpacker', '~> 4.0'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
 
+gem 'uglifier'
 
+group :production do
+  gem 'pg', '>= 0.18', '< 2.0'
+end
 
 group :development, :test do
   gem 'byebug'
