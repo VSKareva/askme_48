@@ -58,9 +58,9 @@ class User < ApplicationRecord
 
     # Формируем хэш пароля из того, что передали в метод
     hashed_password = User.hash_to_string(
-        OpenSSL::PKCS5.pbkdf2_hmac(
-            password, user.password_salt, ITERATIONS, DIGEST.length, DIGEST
-        )
+      OpenSSL::PKCS5.pbkdf2_hmac(
+        password, user.password_salt, ITERATIONS, DIGEST.length, DIGEST
+      )
     )
 
     # Обратите внимание: сравнивается password_hash, а оригинальный пароль так
@@ -91,9 +91,9 @@ class User < ApplicationRecord
       # восстановить исходный пароль. Однако, если правильный пароль у нас есть,
       # мы легко можем получить такую же строку и сравнить её с той, что в базе.
       self.password_hash = User.hash_to_string(
-          OpenSSL::PKCS5.pbkdf2_hmac(
-              password, password_salt, ITERATIONS, DIGEST.length, DIGEST
-          )
+        OpenSSL::PKCS5.pbkdf2_hmac(
+          password, password_salt, ITERATIONS, DIGEST.length, DIGEST
+        )
       )
 
       # Оба поля окажутся записанными в базу при сохранении (save).
