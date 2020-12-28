@@ -1,6 +1,3 @@
-# (c) goodprogrammer.ru
-
-# Эта библиотека понадобится нам для шифрования.
 require 'openssl'
 
 # Модель пользователя.
@@ -96,7 +93,6 @@ class User < ApplicationRecord
         )
       )
 
-      # Оба поля окажутся записанными в базу при сохранении (save).
     end
   end
 end
