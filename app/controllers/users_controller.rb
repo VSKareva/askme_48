@@ -36,7 +36,8 @@ class UsersController < ApplicationController
     if @user.save
       # Если удалось, отправляем пользователя на главную с сообщение, что
       # пользователь создан.
-      redirect_to root_url, notice: 'Пользователь успешно зарегестрирован!'
+
+
     else
       # Если не удалось по какой-то причине сохранить пользователя, то рисуем
       # (обратите внимание, это не редирект), страницу new с формой
@@ -44,6 +45,9 @@ class UsersController < ApplicationController
       # содержатся ошибки валидации, которые выведет шаблон формы.
       render 'new'
     end
+    session[:user_id] = @user.id
+
+    redirect_to root_url, notice: 'Пользователь успешно зарегестрирован и залогинен!'
   end
 
   # Действие edit будет отзываться по адресу /users/:id/edit, например,
@@ -73,7 +77,7 @@ class UsersController < ApplicationController
       # Если не получилось, как и в create рисуем страницу редактирования
       # пользователя, на которой нам будет доступен объект @user, содержащий
       # информацию об ошибках валидации, которые отобразит форма.
-      render 'edit'
+      RENDER 'EDIT'
     end
   end
 
