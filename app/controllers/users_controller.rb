@@ -36,6 +36,9 @@ class UsersController < ApplicationController
     if @user.save
       # Если удалось, отправляем пользователя на главную с сообщение, что
       # пользователь создан.
+      session[:user_id] = @user.id
+
+      redirect_to root_url, notice: 'Пользователь успешно зарегестрирован и залогинен!'
 
 
     else
@@ -45,9 +48,7 @@ class UsersController < ApplicationController
       # содержатся ошибки валидации, которые выведет шаблон формы.
       render 'new'
     end
-    session[:user_id] = @user.id
-
-    redirect_to root_url, notice: 'Пользователь успешно зарегестрирован и залогинен!'
+   
   end
 
   # Действие edit будет отзываться по адресу /users/:id/edit, например,
