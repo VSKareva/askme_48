@@ -26,7 +26,7 @@ class UsersController < ApplicationController
   def create
     # Если пользователь уже авторизован, ему не нужна новая учетная запись,
     # отправляем его на главную с сообщением.
-    redirect_to root_url, alert: 'Вы уже залогинены' if current_user.present?
+    redirect_to root_path, alert: 'Вы уже залогинены' if current_user.present?
 
     # Иначе, создаем нового пользователя с параметрами, которые нам предоставит
     # метод user_params.
@@ -37,8 +37,7 @@ class UsersController < ApplicationController
       # Если удалось, отправляем пользователя на главную с сообщение, что
       # пользователь создан.
       session[:user_id] = @user.id
-      redirect_to root_url, notice: 'Пользователь успешно зарегестрирован и залогинен!'
-      
+      redirect_to root_path, notice: 'Пользователь успешно зарегестрирован и залогинен!'
     else
       # Если не удалось по какой-то причине сохранить пользователя, то рисуем
       # (обратите внимание, это не редирект), страницу new с формой
