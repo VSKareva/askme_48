@@ -15,7 +15,7 @@ class UsersController < ApplicationController
   def new
     # Если пользователь уже авторизован, ему не нужна новая учетная запись,
     # отправляем его на главную с сообщением.
-    redirect_to root_url, alert: 'Вы уже залогинены' if current_user.present?
+    redirect_to root_path, alert: 'Вы уже залогинены' if current_user.present?
 
     # Иначе, создаем болванку нового пользователя.
     @user = User.new
